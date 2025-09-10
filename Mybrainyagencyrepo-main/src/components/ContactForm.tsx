@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Send, CheckCircle, AlertCircle } from 'lucide-react';
+import Input from './ui/Input';
+import Textarea from './ui/Textarea';
+import Button from './ui/Button';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -86,78 +89,53 @@ const ContactForm = () => {
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-              Full Name *
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              value={formData.name}
-              onChange={handleChange}
-              disabled={status === 'loading'}
-              className="w-full px-4 py-3 bg-gray-100 border border-red-500/30 rounded-lg text-black placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors disabled:opacity-50"
-              placeholder="Your full name"
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-              Email Address *
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-              disabled={status === 'loading'}
-              className="w-full px-4 py-3 bg-gray-100 border border-red-500/30 rounded-lg text-black placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors disabled:opacity-50"
-              placeholder="your@email.com"
-            />
-          </div>
-        </div>
-        
-        <div>
-          <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
-            Company Name
-          </label>
-          <input
+          <Input
+            id="name"
+            name="name"
             type="text"
-            id="company"
-            name="company"
-            value={formData.company}
-            onChange={handleChange}
-            disabled={status === 'loading'}
-            className="w-full px-4 py-3 bg-gray-100 border border-red-500/30 rounded-lg text-black placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors disabled:opacity-50"
-            placeholder="Your company name"
-          />
-        </div>
-        
-        <div>
-          <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-            Message *
-          </label>
-          <textarea
-            id="message"
-            name="message"
+            label="Full Name *"
             required
-            rows={6}
-            value={formData.message}
+            value={formData.name}
             onChange={handleChange}
             disabled={status === 'loading'}
-            className="w-full px-4 py-3 bg-gray-100 border border-red-500/30 rounded-lg text-black placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors resize-none disabled:opacity-50"
-            placeholder="Tell us about your project and how we can help..."
+            placeholder="Your full name"
+          />
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            label="Email Address *"
+            required
+            value={formData.email}
+            onChange={handleChange}
+            disabled={status === 'loading'}
+            placeholder="your@email.com"
           />
         </div>
-        
-        <button
-          type="submit"
+
+        <Input
+          id="company"
+          name="company"
+          type="text"
+          label="Company Name"
+          value={formData.company}
+          onChange={handleChange}
           disabled={status === 'loading'}
-          className="w-full bg-red-500 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-red-500 hover:border hover:border-red-500 transition-all duration-200 shadow-xl flex items-center justify-center group disabled:opacity-50"
-        >
+          placeholder="Your company name"
+        />
+
+        <Textarea
+          id="message"
+          name="message"
+          label="Message *"
+          required
+          value={formData.message}
+          onChange={handleChange}
+          disabled={status === 'loading'}
+          placeholder="Tell us about your project and how we can help..."
+        />
+
+        <Button type="submit" disabled={status === 'loading'} className="w-full group">
           {status === 'loading' ? (
             <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
           ) : (
@@ -166,7 +144,7 @@ const ContactForm = () => {
               <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </>
           )}
-        </button>
+        </Button>
       </form>
     </div>
   );

@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import colors from 'tailwindcss/colors';
+
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
@@ -8,6 +10,13 @@ export default {
       screens: { xl: '1120px' },
     },
     extend: {
+      colors: {
+        brand: {
+          ...colors.red,
+        },
+        base: colors.black,
+        surface: colors.white,
+      },
       spacing: {
         3.5: '0.875rem',
         4.5: '1.125rem',

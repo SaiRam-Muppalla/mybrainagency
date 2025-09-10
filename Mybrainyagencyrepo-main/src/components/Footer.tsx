@@ -1,7 +1,7 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Brain, Mail, Phone, MapPin, Linkedin, Globe } from 'lucide-react';
 import NewsletterForm from './NewsletterForm';
+import ConsultationCTA from './cta/ConsultationCTA';
 
 const Footer = () => {
   return (
@@ -21,6 +21,9 @@ const Footer = () => {
               The Brainy Agency is a global AI automation consultancy specializing in agentic AI and workflow automation, 
               headquartered in India with a worldwide focus.
             </p>
+            <div className="mt-4">
+              <ConsultationCTA className="px-6 py-3" label="Book a Free Consultation" />
+            </div>
             
             {/* Newsletter Signup */}
             <div className="mb-6">

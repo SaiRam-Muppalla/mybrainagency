@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Brain } from 'lucide-react';
 import BookingButton from './booking/BookingButton';
+import ConsultationCTA from './cta/ConsultationCTA';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -74,7 +75,7 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <BookingButton className="px-6 py-2 text-sm">Get Started</BookingButton>
+            <ConsultationCTA className="px-6 py-2 text-sm" label="Get Started" />
           </div>
 
           {/* Mobile menu button */}

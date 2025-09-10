@@ -1,10 +1,10 @@
 //
 import { Link } from 'react-router-dom';
-import { ArrowRight, Zap, Lightbulb, Link as LinkIcon, BarChart3, Rocket } from 'lucide-react';
+import { Zap, Lightbulb, Link as LinkIcon, BarChart3, Rocket } from 'lucide-react';
 import Container from '../components/ui/Container';
 import Section from '../components/ui/Section';
 import MetricChip from '../components/ui/MetricChip';
-import BookingButton from '../components/booking/BookingButton';
+import ConsultationCTA from '../components/cta/ConsultationCTA';
 
 const Home = () => {
   const features = [
@@ -55,10 +55,7 @@ const Home = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-10 sm:mb-12">
-              <BookingButton className="px-6 sm:px-8 py-3.5 text-base sm:text-lg group">
-                Book a Free Consultation
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </BookingButton>
+              <ConsultationCTA className="px-6 sm:px-8 py-3.5 text-base sm:text-lg group" label="Book a Free Consultation" />
               <Link
                 to="/services"
                 className="border-2 border-red-500 text-red-400 px-6 sm:px-8 py-3.5 rounded-lg font-semibold text-base sm:text-lg hover:bg-red-500/10 transition-all duration-200 flex items-center justify-center"
@@ -149,7 +146,7 @@ const Home = () => {
               Join forward-thinking companies that are already leveraging AI to scale faster and work smarter.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-                <BookingButton className="px-6 sm:px-8 py-3.5 text-base sm:text-lg">Book a Free Consultation</BookingButton>
+                <ConsultationCTA className="px-6 sm:px-8 py-3.5 text-base sm:text-lg" label="Book a Free Consultation" />
                 <Link
                   to="/about"
                   className="border-2 border-red-500 text-red-500 px-6 sm:px-8 py-3.5 rounded-lg font-semibold text-base sm:text-lg hover:bg-red-500/10 transition-all duration-200"

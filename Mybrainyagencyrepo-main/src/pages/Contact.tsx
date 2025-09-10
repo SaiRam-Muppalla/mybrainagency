@@ -1,6 +1,6 @@
 import { MapPin, Phone, Mail, Globe, Clock } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import ContactForm from '../components/ContactForm';
+import ContactForm from '../components/contact/ContactForm';
+import { AppConfig } from '../config/appConfig';
 
 const Contact = () => {
   const contactInfo = [
@@ -117,14 +117,15 @@ const Contact = () => {
               Choose the best way to connect with our team
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/contact"
+              <a
+                href={AppConfig.calendlyUrl ? undefined : `mailto:${AppConfig.contactToEmail}?subject=${encodeURIComponent('['+AppConfig.siteName+'] Contact')}`}
+                onClick={(e) => { if (AppConfig.calendlyUrl) e.preventDefault(); }}
                 className="bg-red-500 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-red-500 hover:border hover:border-red-500 transition-all duration-200 shadow-xl"
               >
                 Book a Free Consultation
-              </Link>
+              </a>
               <a
-                href="mailto:mahendra@thebrainy.agency"
+                href={`mailto:${AppConfig.contactToEmail}?subject=${encodeURIComponent(AppConfig.siteName + ' — Contact')}`}
                 className="border-2 border-red-500 text-red-500 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-red-500/10 transition-all duration-200"
               >
                 Email Us Directly

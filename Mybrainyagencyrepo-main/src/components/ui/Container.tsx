@@ -1,14 +1,12 @@
-import React from 'react';
+import type { ComponentPropsWithoutRef } from 'react';
 
-type Props = React.HTMLAttributes<HTMLDivElement> & {
-  as?: keyof JSX.IntrinsicElements;
-};
+type Props = ComponentPropsWithoutRef<'div'>;
 
-const Container: React.FC<Props> = ({ as: Tag = 'div', className = '', children, ...rest }) => {
+const Container = ({ className = '', children, ...rest }: Props) => {
   return (
-    <Tag className={`container px-4 sm:px-6 lg:px-8 ${className}`} {...rest}>
+    <div className={`container px-4 sm:px-6 lg:px-8 ${className}`} {...rest}>
       {children}
-    </Tag>
+    </div>
   );
 };
 

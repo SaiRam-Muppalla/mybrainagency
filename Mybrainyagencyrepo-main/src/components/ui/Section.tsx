@@ -1,14 +1,12 @@
-import React from 'react';
+import type { ComponentPropsWithoutRef } from 'react';
 
-type Props = React.HTMLAttributes<HTMLElement> & {
-  as?: keyof JSX.IntrinsicElements;
-};
+type Props = ComponentPropsWithoutRef<'section'>;
 
-const Section: React.FC<Props> = ({ as: Tag = 'section', className = '', children, ...rest }) => {
+const Section = ({ className = '', children, ...rest }: Props) => {
   return (
-    <Tag className={`section ${className}`} {...rest}>
+    <section className={`section ${className}`} {...rest}>
       {children}
-    </Tag>
+    </section>
   );
 };
 

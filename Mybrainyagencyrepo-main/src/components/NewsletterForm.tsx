@@ -35,7 +35,7 @@ const NewsletterForm: React.FC<NewsletterFormProps> = ({ className = "" }) => {
       } else {
         throw new Error('Subscription failed');
       }
-    } catch (error) {
+  } catch {
       setStatus('error');
       setMessage('Something went wrong. Please try again.');
     }

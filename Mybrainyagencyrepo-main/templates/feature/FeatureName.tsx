@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react';
-import Container from '@/components/ui/Container';
-import Section from '@/components/ui/Section';
-import Card from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
+import Container from '../src/components/ui/Container';
+import Section from '../src/components/ui/Section';
+import Card from '../src/components/ui/Card';
+import Button from '../src/components/ui/Button';
 
 export default function FeatureName() {
   const [state, setState] = useState<'loading'|'empty'|'error'|'ready'>('loading');
-  const [data, setData] = useState<any[]>([]);
+  type Item = { title: string; description: string };
+  const [data, setData] = useState<Item[]>([]);
 
   useEffect(() => {
     (async () => {
       try {
-        const items: any[] = [];
+  const items: Item[] = [];
         setData(items);
         setState(items.length ? 'ready' : 'empty');
       } catch {

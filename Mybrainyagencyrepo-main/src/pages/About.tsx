@@ -1,5 +1,5 @@
-import React from 'react';
-import { CheckCircle, Award, Users, Globe, Target, Zap } from 'lucide-react';
+//
+import { CheckCircle, Award, Globe, Target, Zap } from 'lucide-react';
 
 const About = () => {
   const achievements = [

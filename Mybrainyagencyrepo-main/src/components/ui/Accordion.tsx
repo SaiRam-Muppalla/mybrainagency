@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { ReactNode, HTMLAttributes } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-type Item = { question: string; answer: React.ReactNode };
-type Props = { items: Item } & React.HTMLAttributes<HTMLDivElement>;
+type Item = { question: string; answer: ReactNode };
 
-const AccordionItem: React.FC<{ item: Item; index: number } & React.HTMLAttributes<HTMLDivElement>> = ({ item, index, ...rest }) => {
+const AccordionItem: React.FC<{ item: Item } & HTMLAttributes<HTMLDivElement>> = ({ item, ...rest }) => {
   const [open, setOpen] = useState(false);
   return (
     <div {...rest}>
@@ -25,11 +25,11 @@ const AccordionItem: React.FC<{ item: Item; index: number } & React.HTMLAttribut
   );
 };
 
-const Accordion: React.FC<{ items: Item[] } & React.HTMLAttributes<HTMLDivElement>> = ({ items, className = '' }) => {
+const Accordion: React.FC<{ items: Item[] } & HTMLAttributes<HTMLDivElement>> = ({ items, className = '' }) => {
   return (
     <div className={`divide-y divide-white/10 ${className}`}>
       {items.map((item, i) => (
-        <AccordionItem key={i} item={item} index={i} className="py-2" />
+  <AccordionItem key={i} item={item} className="py-2" />
       ))}
     </div>
   );

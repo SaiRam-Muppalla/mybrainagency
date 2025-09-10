@@ -1,4 +1,4 @@
-import React from 'react';
+//
 import { Link } from 'react-router-dom';
 import { ArrowRight, Zap, Lightbulb, Link as LinkIcon, BarChart3, Rocket } from 'lucide-react';
 import Container from '../components/ui/Container';

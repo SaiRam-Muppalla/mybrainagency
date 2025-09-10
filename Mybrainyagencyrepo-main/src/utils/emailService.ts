@@ -48,7 +48,7 @@ export const sendEmail = async (
     case 'formspree':
       return sendViaFormspree(type, data);
     case 'emailjs':
-      return sendViaEmailJS(type, data);
+      return sendViaEmailJS();
     case 'netlify':
       return sendViaNetlify(type, data);
     default:
@@ -79,10 +79,7 @@ const sendViaFormspree = async (
   return response.json();
 };
 
-const sendViaEmailJS = async (
-  type: 'newsletter' | 'contact',
-  data: NewsletterSubscription | ContactInquiry
-) => {
+const sendViaEmailJS = async () => {
   // EmailJS implementation would go here
   // Requires emailjs-com package
   throw new Error('EmailJS implementation needed');

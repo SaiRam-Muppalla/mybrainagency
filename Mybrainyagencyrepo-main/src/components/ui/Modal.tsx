@@ -25,7 +25,19 @@ const Modal: React.FC<Props> = ({ open, onClose, title, children }) => {
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={title}>
-      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/60"
+        role="button"
+        tabIndex={0}
+        aria-label="Close modal"
+        onClick={onClose}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onClose();
+          }
+        }}
+      />
       <div className="absolute inset-0 flex items-center justify-center p-4">
         <div
           ref={dialogRef}

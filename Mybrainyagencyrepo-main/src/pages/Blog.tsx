@@ -1,5 +1,6 @@
-import React from 'react';
-import { Calendar, Clock, ArrowRight, BookOpen, Lightbulb, TrendingUp } from 'lucide-react';
+//
+import { Calendar, BookOpen, Lightbulb, TrendingUp } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import NewsletterForm from '../components/NewsletterForm';
 
 const Blog = () => {

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Globe, Clock, Send, CheckCircle } from 'lucide-react';
+import { MapPin, Phone, Mail, Globe, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import ContactForm from '../components/ContactForm';
 
 const Contact = () => {

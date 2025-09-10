@@ -40,7 +40,7 @@ const ContactForm = () => {
       } else {
         throw new Error('Failed to send message');
       }
-    } catch (error) {
+  } catch {
       setStatus('error');
       setResponseMessage('Failed to send message. Please try again or email us directly.');
     }

@@ -15,35 +15,35 @@ export interface MailAdapter {
 }
 
 class SmtpAdapter implements MailAdapter {
-  async sendContactMessage(_payload: ContactMessage) {
+  async sendContactMessage(payload: ContactMessage) {
     try {
       // Minimal SMTP client via fetch to a serverless SMTP relay or your backend
       // Here we just simulate; real implementation would connect via SMTP library in server env
-      console.info('[smtp] sending contact email to', AppConfig.contactToEmail);
+      console.info('[smtp] sending contact email to', AppConfig.contactToEmail, 'from', payload.email);
       return { ok: true } as const;
-    } catch (e) {
+    } catch {
       return { ok: false, error: 'SMTP send failed' } as const;
     }
   }
 }
 
 class SendGridAdapter implements MailAdapter {
-  async sendContactMessage(_payload: ContactMessage) {
-      try {
-        console.info('[sendgrid] sending contact email to', AppConfig.contactToEmail);
-        return { ok: true } as const;
-      } catch (e) {
-        return { ok: false, error: 'SendGrid send failed' } as const;
-      }
+  async sendContactMessage(payload: ContactMessage) {
+    try {
+      console.info('[sendgrid] sending contact email to', AppConfig.contactToEmail, 'from', payload.email);
+      return { ok: true } as const;
+    } catch {
+      return { ok: false, error: 'SendGrid send failed' } as const;
+    }
   }
 }
 
 class ResendAdapter implements MailAdapter {
-  async sendContactMessage(_payload: ContactMessage) {
+  async sendContactMessage(payload: ContactMessage) {
     try {
-      console.info('[resend] sending contact email to', AppConfig.contactToEmail);
+      console.info('[resend] sending contact email to', AppConfig.contactToEmail, 'from', payload.email);
       return { ok: true } as const;
-    } catch (e) {
+    } catch {
       return { ok: false, error: 'Resend send failed' } as const;
     }
   }

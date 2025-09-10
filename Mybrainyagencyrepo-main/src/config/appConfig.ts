@@ -19,12 +19,16 @@ const EnvSchema = z.object({
 });
 
 // Merge env sources: Vite's import.meta.env (when present) + process.env (Node/tests)
+type EnvRecord = Record<string, string | undefined>;
+const nodeEnv: EnvRecord = (typeof process !== 'undefined'
+  ? ((process as unknown as { env?: EnvRecord }).env ?? {})
+  : {});
+const viteEnv: EnvRecord = (((import.meta as unknown as { env?: EnvRecord }).env) ?? {});
 const parsed = EnvSchema.safeParse({
-  ...(typeof process !== 'undefined' ? (process as any).env : {}),
-  ...(((import.meta as any)?.env) || {}),
+  ...nodeEnv,
+  ...viteEnv,
 });
 if (!parsed.success) {
-  // eslint-disable-next-line no-console
   console.error('Invalid environment configuration:', parsed.error.flatten());
   throw new Error('Environment validation failed. See console for details.');
 }

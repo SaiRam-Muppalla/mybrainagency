@@ -1,6 +1,9 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 
-let handler: any;
+type TestReq = { method?: string; body?: unknown; headers: Record<string, string>; socket: { remoteAddress?: string } };
+type TestRes = { setHeader: (k: string, v: string) => void; status: (c: number) => TestRes; json: (d: unknown) => TestRes };
+type Handler = (req: TestReq, res: TestRes) => Promise<unknown>;
+let handler: Handler;
 beforeAll(async () => {
   process.env.VITE_CONTACT_TO_EMAIL = 'inbox@example.com';
   const mod = await import('./send-email');
@@ -9,13 +12,13 @@ beforeAll(async () => {
 
 // Ensure required env for AppConfig in test environment is set via process.env (handled in beforeAll)
 
-function mockReqRes(body: any = {}, method = 'POST') {
-  const req: any = { method, body, headers: {}, socket: { remoteAddress: '127.0.0.1' } };
-  let statusCode = 200; let jsonData: any; const headers: Record<string,string> = {};
-  const res: any = {
+function mockReqRes(body: unknown = {}, method = 'POST') {
+  const req: TestReq = { method, body, headers: {}, socket: { remoteAddress: '127.0.0.1' } };
+  let statusCode = 200; let jsonData: unknown; const headers: Record<string,string> = {};
+  const res: TestRes = {
     setHeader: (k: string, v: string) => { headers[k] = v; },
     status: (code: number) => { statusCode = code; return res; },
-    json: (d: any) => { jsonData = d; return res; },
+    json: (d: unknown) => { jsonData = d; return res; },
   };
   return { req, res, get: () => ({ statusCode, jsonData, headers }) };
 }

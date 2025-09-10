@@ -20,7 +20,7 @@ type FormData = z.infer<typeof Schema>;
 
 export default function ContactForm() {
   const [status, setStatus] = useState<'idle'|'submitting'|'success'|'error'>('idle');
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({ resolver: zodResolver(Schema), defaultValues: { consent: false } as any });
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({ resolver: zodResolver(Schema), defaultValues: { consent: false } });
 
   const onSubmit = async (data: FormData) => {
     setStatus('submitting');

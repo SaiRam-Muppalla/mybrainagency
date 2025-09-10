@@ -10,12 +10,17 @@ const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
 const RATE_LIMIT_MAX = 10;
 const ipHits = new Map<string, { count: number; resetAt: number }>();
 
-export default async function handler(req: any, res: any) {
+type Req = { method?: string; body?: unknown; headers: Record<string, string | string[]>; socket: { remoteAddress?: string } };
+type Res = { setHeader: (k: string, v: string) => void; status: (c: number) => Res; json: (d: unknown) => Res };
+
+export default async function handler(req: Req, res: Res) {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   // Basic rate limiting per-IP
-  const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.socket.remoteAddress || 'unknown';
+  const xff = req.headers['x-forwarded-for'];
+  const ipHeader = Array.isArray(xff) ? xff[0] : xff;
+  const ip = ipHeader?.split(',')[0]?.trim() || req.socket.remoteAddress || 'unknown';
   const now = Date.now();
   const bucket = ipHits.get(ip) ?? { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS };
   if (now > bucket.resetAt) {

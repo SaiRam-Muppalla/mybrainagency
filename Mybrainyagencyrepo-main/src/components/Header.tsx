@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Brain } from 'lucide-react';
+import BookingButton from './booking/BookingButton';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -73,12 +74,7 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <Link
-              to="/contact"
-              className="bg-red-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-white hover:text-red-500 hover:border hover:border-red-500 transition-all duration-200 shadow-lg hover:shadow-red-500/25"
-            >
-              Get Started
-            </Link>
+            <BookingButton className="px-6 py-2 text-sm">Get Started</BookingButton>
           </div>
 
           {/* Mobile menu button */}
@@ -112,13 +108,9 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              <Link
-                to="/contact"
-                onClick={() => setIsMenuOpen(false)}
-                className="mt-4 bg-red-500 text-white px-6 py-2 rounded-lg font-medium text-center hover:bg-white hover:text-red-500 hover:border hover:border-red-500 transition-all"
-              >
-                Get Started
-              </Link>
+              <div className="mt-4">
+                <BookingButton className="w-full px-6 py-2">Get Started</BookingButton>
+              </div>
             </nav>
           </div>
         )}

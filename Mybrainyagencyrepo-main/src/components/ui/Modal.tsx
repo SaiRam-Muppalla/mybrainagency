@@ -22,6 +22,16 @@ const Modal: React.FC<Props> = ({ open, onClose, title, children }) => {
     if (open) dialogRef.current?.focus();
   }, [open]);
 
+  // Lock page scroll when modal is open
+  useEffect(() => {
+    if (!open) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [open]);
+
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={title}>

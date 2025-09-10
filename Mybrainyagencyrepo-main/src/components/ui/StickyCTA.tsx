@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
+import BookingButton from '../booking/BookingButton';
 
 const StickyCTA: React.FC = () => {
   const [visible, setVisible] = useState(false);
@@ -31,9 +31,7 @@ const StickyCTA: React.FC = () => {
           </button>
         </div>
         <div className="px-4 pb-4">
-          <Link to="/contact" className="block w-full text-center bg-white text-red-600 font-semibold py-3 rounded-lg hover:bg-red-50">
-            Book now
-          </Link>
+          <BookingButton className="w-full bg-white text-red-600 hover:bg-red-50 py-3">Book now</BookingButton>
         </div>
       </div>
     </div>

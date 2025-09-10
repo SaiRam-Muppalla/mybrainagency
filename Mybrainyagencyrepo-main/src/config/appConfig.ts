@@ -18,7 +18,11 @@ const EnvSchema = z.object({
   VITE_FEATURE_CONTACT_FORM: z.coerce.boolean().default(true),
 });
 
-const parsed = EnvSchema.safeParse(import.meta.env);
+// Merge env sources: Vite's import.meta.env (when present) + process.env (Node/tests)
+const parsed = EnvSchema.safeParse({
+  ...(typeof process !== 'undefined' ? (process as any).env : {}),
+  ...(((import.meta as any)?.env) || {}),
+});
 if (!parsed.success) {
   // eslint-disable-next-line no-console
   console.error('Invalid environment configuration:', parsed.error.flatten());

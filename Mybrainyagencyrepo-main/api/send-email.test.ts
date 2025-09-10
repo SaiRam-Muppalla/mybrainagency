@@ -1,11 +1,13 @@
-import { describe, it, expect } from 'vitest';
-import handler from './send-email';
+import { describe, it, expect, beforeAll } from 'vitest';
 
-// Ensure required env for AppConfig in test environment
-// @ts-ignore
-globalThis.import = globalThis.import || {};
-// @ts-ignore
-(globalThis as any).import = { meta: { env: { VITE_CONTACT_TO_EMAIL: 'inbox@example.com' } } };
+let handler: any;
+beforeAll(async () => {
+  process.env.VITE_CONTACT_TO_EMAIL = 'inbox@example.com';
+  const mod = await import('./send-email');
+  handler = mod.default;
+});
+
+// Ensure required env for AppConfig in test environment is set via process.env (handled in beforeAll)
 
 function mockReqRes(body: any = {}, method = 'POST') {
   const req: any = { method, body, headers: {}, socket: { remoteAddress: '127.0.0.1' } };

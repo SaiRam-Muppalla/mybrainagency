@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Brain } from 'lucide-react';
 
@@ -16,10 +16,32 @@ const Header = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  const menuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMenuOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, []);
+
+  useEffect(() => {
+    const onClickOutside = (e: MouseEvent) => {
+      if (!mobileMenuRef.current) return;
+      if (!mobileMenuRef.current.contains(e.target as Node) && !menuButtonRef.current?.contains(e.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+    if (isMenuOpen) document.addEventListener('mousedown', onClickOutside);
+    return () => document.removeEventListener('mousedown', onClickOutside);
+  }, [isMenuOpen]);
+
   return (
-    <header className="fixed top-0 w-full bg-black/95 backdrop-blur-sm border-b border-red-500/20 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
+    <header className="fixed top-0 w-full bg-black/80 backdrop-blur-xs md:backdrop-blur-sm border-b border-red-500/20 z-50">
+      <div className="container">
+        <div className="flex justify-between items-center py-3 md:py-4 min-h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
@@ -63,6 +85,10 @@ const Header = () => {
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden text-white hover:text-red-400"
+            aria-label="Toggle menu"
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-nav"
+            ref={menuButtonRef}
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -70,7 +96,7 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-red-500/20">
+          <div ref={mobileMenuRef} id="mobile-nav" className="md:hidden py-4 border-t border-red-500/20">
             <nav className="flex flex-col space-y-2">
               {navigation.map((item) => (
                 <Link

@@ -6,6 +6,7 @@ import Textarea from '../ui/Textarea';
 import Select from '../ui/Select';
 import { CalendarEmbedCalendly } from './CalendarEmbedCalendly';
 import useBookingForm from './useBookingForm';
+import { track } from '../../utils/analytics';
 
 export default function BookingModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -14,6 +15,8 @@ export default function BookingModal({ open, onClose }: { open: boolean; onClose
   useEffect(() => {
     if (open) {
       setStep(1);
+      track('booking.modal.open');
+      track('booking.step.view', { step: 1 });
     }
   }, [open]);
 
@@ -22,6 +25,8 @@ export default function BookingModal({ open, onClose }: { open: boolean; onClose
 
   const onBooked = (payload: unknown) => {
     setStep(3);
+    track('booking.step.view', { step: 3 });
+    track('booking.success');
     if (emailProvider !== 'none') {
       fetch('/api/book-consultation', {
         method: 'POST',
@@ -56,8 +61,12 @@ export default function BookingModal({ open, onClose }: { open: boolean; onClose
           </label>
           {errors.consent && <p className="text-red-600 text-sm" role="alert">{errors.consent}</p>}
           <div className="flex justify-end gap-3 pt-2">
-            <Button variant="outline" onClick={onClose}>Cancel</Button>
-            <Button onClick={() => validate() && setStep(2)}>Continue to Calendar</Button>
+            <Button variant="outline" onClick={() => { track('booking.cancel', { step: 1 }); onClose(); }}>Cancel</Button>
+            <Button onClick={() => {
+              const ok = validate();
+              track('booking.form.submit', { valid: ok });
+              if (ok) { setStep(2); track('booking.step.view', { step: 2 }); }
+            }}>Continue to Calendar</Button>
           </div>
         </div>
       )}
@@ -71,8 +80,8 @@ export default function BookingModal({ open, onClose }: { open: boolean; onClose
             <CalendarEmbedCalendly url={calendlyUrl} prefill={getCalendlyPrefill()} utm={getUtmParams()} onBooked={onBooked} />
           )}
           <div className="flex justify-between">
-            <Button variant="outline" onClick={() => setStep(1)}>Back</Button>
-            <a href={getMailtoUrl()} className="text-red-500 hover:underline">Prefer email?</a>
+            <Button variant="outline" onClick={() => { setStep(1); track('booking.step.view', { step: 1, from: 2 }); }}>Back</Button>
+            <a href={getMailtoUrl()} onClick={() => track('booking.mailto.fallback', { step: 2 })} className="text-red-500 hover:underline">Prefer email?</a>
           </div>
         </div>
       )}
@@ -84,8 +93,8 @@ export default function BookingModal({ open, onClose }: { open: boolean; onClose
           <h3 className="text-xl font-semibold mb-2">Booking Confirmed!</h3>
           <p className="text-black/70 mb-4">We’ve sent you a confirmation. Add it to your calendar below.</p>
           <div className="flex justify-center gap-3">
-            <Button onClick={onClose}>Back to site</Button>
-            <a href={getMailtoUrl()} className="inline-flex items-center px-4 py-3 border-2 border-red-500 text-red-500 rounded-lg">Contact via email</a>
+            <Button onClick={() => { track('booking.close.confirmation'); onClose(); }}>Back to site</Button>
+            <a href={getMailtoUrl()} onClick={() => track('booking.mailto.fromConfirmation')} className="inline-flex items-center px-4 py-3 border-2 border-red-500 text-red-500 rounded-lg">Contact via email</a>
           </div>
         </div>
       )}

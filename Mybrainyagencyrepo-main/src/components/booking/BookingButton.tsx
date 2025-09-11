@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import Button from '../ui/Button';
 import BookingModal from './BookingModal';
+import { track } from '../../utils/analytics';
 
 export default function BookingButton({
   children = 'Book a Free Consultation',
@@ -12,10 +13,15 @@ export default function BookingButton({
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
-  return (
-    <>
-      <Button variant={variant} className={className} onClick={() => setOpen(true)}>{children}</Button>
-      <BookingModal open={open} onClose={() => setOpen(false)} />
-    </>
-  );
+  const openModal = useCallback(() => {
+    track('cta.click', { location: 'booking-button', text: typeof children === 'string' ? children : undefined });
+    setOpen(true);
+  }, [children]);
+
+  const closeModal = useCallback(() => setOpen(false), []);
+
+  return <>
+    <Button variant={variant} className={className} onClick={openModal}>{children}</Button>
+    <BookingModal open={open} onClose={closeModal} />
+  </>;
 }

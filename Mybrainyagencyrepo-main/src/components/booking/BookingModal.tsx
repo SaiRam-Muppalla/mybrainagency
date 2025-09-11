@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
@@ -11,12 +11,16 @@ import { track } from '../../utils/analytics';
 export default function BookingModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const { formData, errors, handleChange, validate, getCalendlyPrefill, getUtmParams, getMailtoUrl } = useBookingForm();
+  const firstFieldRef = useRef<HTMLInputElement | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  const focusableSelector = 'a[href], button:not([disabled]), textarea, input, select';
 
   useEffect(() => {
     if (open) {
       setStep(1);
       track('booking.modal.open');
       track('booking.step.view', { step: 1 });
+  setTimeout(() => firstFieldRef.current?.focus(), 30);
     }
   }, [open]);
 
@@ -38,10 +42,29 @@ export default function BookingModal({ open, onClose }: { open: boolean; onClose
 
   return (
     <Modal open={open} onClose={onClose} title={step === 1 ? 'Book a Free Consultation' : step === 2 ? 'Select a Time' : 'Booking Confirmed'}>
+      {/* Focus trap wrapper */}
+      <div
+        ref={modalRef}
+        onKeyDown={(e) => {
+          if (e.key !== 'Tab') return;
+          const nodeList = modalRef.current?.querySelectorAll<HTMLElement>(focusableSelector);
+          if (!nodeList || !nodeList.length) return;
+          const list: HTMLElement[] = Array.from(nodeList);
+          const firstEl = list[0];
+          const lastEl = list[list.length - 1];
+          if (e.shiftKey && document.activeElement === firstEl) {
+            e.preventDefault();
+            lastEl.focus();
+          } else if (!e.shiftKey && document.activeElement === lastEl) {
+            e.preventDefault();
+            firstEl.focus();
+          }
+        }}
+      >
       {step === 1 && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input id="name" name="name" label="Full Name *" value={formData.name} onChange={handleChange} error={errors.name} />
+            <Input ref={firstFieldRef as any} id="name" name="name" label="Full Name *" value={formData.name} onChange={handleChange} error={errors.name} />
             <Input id="email" name="email" type="email" label="Work Email *" value={formData.email} onChange={handleChange} error={errors.email} />
           </div>
           <Input id="company" name="company" label="Company *" value={formData.company} onChange={handleChange} error={errors.company} />
@@ -98,6 +121,7 @@ export default function BookingModal({ open, onClose }: { open: boolean; onClose
           </div>
         </div>
       )}
+  </div>
     </Modal>
   );
 }

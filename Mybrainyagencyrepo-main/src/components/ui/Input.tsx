@@ -2,10 +2,11 @@ import React from 'react';
 
 type Props = React.InputHTMLAttributes<HTMLInputElement> & { label?: string; hint?: string; error?: string };
 
-const Input: React.FC<Props> = ({ id, label, hint, error, className = '', ...rest }) => {
+const Input = React.forwardRef<HTMLInputElement, Props>(({ id, label, hint, error, className = '', ...rest }, ref) => {
   const input = (
     <input
       id={id}
+  ref={ref}
       className={`w-full h-11 px-4 bg-gray-100 border ${error ? 'border-red-500' : 'border-red-500/30'} rounded-lg text-black placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors ${className}`}
       aria-invalid={!!error}
       aria-describedby={hint ? `${id}-hint` : undefined}
@@ -21,6 +22,8 @@ const Input: React.FC<Props> = ({ id, label, hint, error, className = '', ...res
       {error && <p className="mt-1 text-xs text-red-600" role="alert">{error}</p>}
     </div>
   );
-};
+});
+
+Input.displayName = 'Input';
 
 export default Input;

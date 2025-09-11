@@ -1,4 +1,5 @@
 import { InlineWidget, useCalendlyEventListener } from 'react-calendly';
+import { useEffect, useState } from 'react';
 
 type Prefill = {
   name?: string;
@@ -28,9 +29,17 @@ export function CalendarEmbedCalendly({
   onBooked?: (payload: unknown) => void;
   className?: string;
 }) {
+  const [ready, setReady] = useState(false);
+
   useCalendlyEventListener({
     onEventScheduled: (e) => onBooked?.(e.data?.payload),
   });
+
+  // Defer rendering one tick so modal transition feels snappier
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setReady(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   // Normalize prefill to match react-calendly expectations
   const normalizedPrefill: Prefill | undefined = prefill
@@ -44,12 +53,16 @@ export function CalendarEmbedCalendly({
       }
     : undefined;
 
-  return (
-    <div className={`rounded-2xl overflow-hidden relative ${className}`}>
+  return <div className={`rounded-2xl overflow-hidden relative ${className}`}>
+    {!ready && (
+      <div className="h-[720px] grid place-items-center bg-white">
+        <div className="w-8 h-8 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    )}
+    {ready && (
       <InlineWidget
         url={url}
         styles={{ height: '720px' }}
-        // react-calendly types are broader; cast via unknown to satisfy lint without using any
         prefill={normalizedPrefill as unknown as {
           name?: string;
           email?: string;
@@ -58,8 +71,8 @@ export function CalendarEmbedCalendly({
         }}
         utm={utm}
       />
-    </div>
-  );
+    )}
+  </div>;
 }
 
 export default CalendarEmbedCalendly;

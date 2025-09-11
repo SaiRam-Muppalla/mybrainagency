@@ -1,7 +1,6 @@
 import { MapPin, Phone, Mail, Globe, Clock } from 'lucide-react';
-import ContactForm from '../components/contact/ContactForm';
-import { AppConfig } from '../config/appConfig';
 import ConsultationCTA from '../components/cta/ConsultationCTA';
+import ContactForm from '../components/ContactForm';
 
 const Contact = () => {
   const contactInfo = [
@@ -107,28 +106,8 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* CTA Buttons */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900/50">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="bg-white border-2 border-red-500/20 rounded-2xl p-8 md:p-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
-              Ready to Start Your <span className="text-red-500">AI Journey?</span>
-            </h2>
-            <p className="text-xl text-gray-700 mb-8">
-              Choose the best way to connect with our team
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <ConsultationCTA className="px-8 py-4 rounded-lg font-semibold text-lg shadow-xl" label="Book a Free Consultation" />
-              <a
-                href={`mailto:${AppConfig.contactToEmail}?subject=${encodeURIComponent(AppConfig.siteName + ' — Contact')}`}
-                className="border-2 border-red-500 text-red-500 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-red-500/10 transition-all duration-200"
-              >
-                Email Us Directly
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+  {/* Unified CTA */}
+  <ConsultationCTA />
     </div>
   );
 };

@@ -1,35 +1,32 @@
-import { lazy, Suspense, useState } from 'react';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
-import { AppConfig } from '../../config/appConfig';
+import BookingButton from '../booking/BookingButton';
 
-const CalendlyWidget = lazy(() => import('react-calendly').then(m => ({ default: m.InlineWidget })));
+const agencyEmail = import.meta.env.VITE_AGENCY_EMAIL || 'inbox@thebrainy.agency';
 
-export default function ConsultationCTA({ label = 'Book a Free Consultation', className = '' }: { label?: string; className?: string }) {
-  const [open, setOpen] = useState(false);
-  const hasCalendly = !!AppConfig.features.calendly && !!AppConfig.calendlyUrl;
-  const mailto = `mailto:${AppConfig.contactToEmail}?subject=${encodeURIComponent('['+AppConfig.siteName+'] Consultation')}`;
-
-  if (!hasCalendly) {
-    return (
-      <a href={mailto} className={`inline-flex items-center justify-center ${className}`}>
-        <Button asChild>
-          <span>{label}</span>
-        </Button>
-      </a>
-    );
-  }
-
-  return (
-    <>
-      <Button className={className} onClick={() => setOpen(true)}>{label}</Button>
-      <Modal open={open} onClose={() => setOpen(false)} title="Book a Free Consultation">
-        <div className="rounded-2xl overflow-hidden">
-          <Suspense fallback={<div className="grid place-items-center h-[720px]"><div className="w-8 h-8 border-2 border-red-500 border-t-transparent rounded-full animate-spin" /></div>}>
-            <CalendlyWidget url={AppConfig.calendlyUrl!} styles={{ height: '720px' }} />
-          </Suspense>
-        </div>
-      </Modal>
-    </>
-  );
+export function ConsultationCTA() {
+	const subject = encodeURIComponent('Inquiry about AI Consultation');
+	const body = encodeURIComponent('Hi Brainy Agency team,\n\nI would like to discuss...');
+	const mailto = `mailto:${agencyEmail}?subject=${subject}&body=${body}`;
+	return (
+		<section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900/50">
+			<div className="max-w-4xl mx-auto text-center">
+				<div className="bg-white border-2 border-red-500/20 rounded-2xl p-8 md:p-12">
+					<h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
+						Ready to Start Your <span className="text-red-500">AI Journey?</span>
+					</h2>
+						<p className="text-xl text-gray-700 mb-8">Choose the best way to connect with our team</p>
+					<div className="flex flex-col sm:flex-row gap-4 justify-center">
+						<BookingButton className="px-8 py-4 text-lg">Book a Free Consultation</BookingButton>
+						<a
+							href={mailto}
+							className="border-2 border-red-500 text-red-500 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-red-500/10 transition-all duration-200"
+						>
+							Email Us Directly
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+	);
 }
+
+export default ConsultationCTA;
